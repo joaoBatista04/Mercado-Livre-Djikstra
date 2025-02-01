@@ -91,3 +91,9 @@ void printNode(Node *node)
         printf("NODE %d: %f\n", node->id, node->weight);
     }
 }
+
+Node **node_initialize(int nodeAmount)
+{
+    Node **node = (Node **)calloc(50000, sizeof(Node *));
+    return node;
+}

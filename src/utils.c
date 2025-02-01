@@ -67,7 +67,7 @@ int get_number_id(char *name)
 void djikstra(Graph *graph, int src, float *dist, int *path)
 {
     int nodeAmount = graph_get_nodes_amount(graph);
-    int *visited = calloc(nodeAmount, sizeof(int));
+    int *visited = calloc(nodeAmount + 1, sizeof(int));
 
     for (int i = 0; i <= nodeAmount; i++)
     {
@@ -154,4 +154,6 @@ void print_shortest_path(int *path, float *dist, int src, int nodeAmount)
     qsort(p_vector, nodeAmount + 1, sizeof(Printer *), printer_compare);
 
     printer_print_path(p_vector, src, nodeAmount, path);
+
+    printer_free(p_vector, nodeAmount + 1);
 }

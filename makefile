@@ -1,7 +1,7 @@
 FILES = src/node.c src/graph.c src/pq.c src/printer.c src/utils.c src/main.c
 EXECUTABLE = trab1
 FLAGS = -lm -pedantic -Wall -g
-ENTRY_FILE = in/caso_teste_muito_pequeno_1.txt
+ENTRY_FILE = in/caso_teste_pequeno_1.txt
 EXIT_FILE = out_N10000_S50_C300_M10.txt
 
 all: 

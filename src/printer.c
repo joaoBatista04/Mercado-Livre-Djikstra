@@ -22,7 +22,7 @@ Printer **printer_vector_create(int src, float *dist, int nodeAmount)
 {
     Printer **p_vector = (Printer **)calloc(nodeAmount + 1, sizeof(Printer *));
 
-    for (int i = 0; i <= nodeAmount; i++)
+    for (int i = 0; i < nodeAmount; i++)
     {
         Printer *p = printer_init(i, dist[i]);
 
@@ -71,4 +71,14 @@ void printer_print_path(Printer **p_vector, int src, int nodeAmount, int *path)
             printf(" (Distance: %.2f)\n", p_vector[i]->dist);
         }
     }
+}
+
+void printer_free(Printer **printer, int nodeAmount)
+{
+    for (int i = 0; i <= nodeAmount; i++)
+    {
+        free(printer[i]);
+    }
+
+    free(printer);
 }

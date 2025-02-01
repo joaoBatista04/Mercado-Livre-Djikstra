@@ -14,7 +14,8 @@ PQ *pq_init(int max_size)
     PQ *pq = (PQ *)malloc(sizeof(PQ));
 
     // Memory allocation to priorty queue params
-    pq->nodes = (Node **)malloc((max_size + 1) * sizeof(Node *));
+    pq->nodes = (Node **)calloc((max_size * 5), sizeof(Node *));
+
     pq->map = (int *)calloc((max_size + 1), sizeof(int));
     pq->size = 0;
 
@@ -51,6 +52,7 @@ Node *pq_delete_min(PQ *pq)
 
     return min;
 }
+
 void pq_decrease_key(PQ *pq, int id, float new_weight)
 {
     int i = pq->map[id];

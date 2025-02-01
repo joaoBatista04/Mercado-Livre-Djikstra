@@ -15,6 +15,8 @@ void node_destroy(Node *node);
 void node_vector_destroy(Node **vector, int nodes_amount);
 bool node_more(Node *node1, Node *node2);
 
+Node **node_initialize(int nodeAmount);
+
 void printNode(Node *node);
 
 #endif

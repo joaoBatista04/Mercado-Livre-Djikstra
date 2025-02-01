@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     Graph *graph = read_graph_informations(&vsrc, argv[1]);
 
     int nodeAmount = graph_get_nodes_amount(graph);
-    float *dist = (float *)malloc(nodeAmount * sizeof(float));
-    int *path = (int *)malloc(nodeAmount * sizeof(int));
+    float *dist = (float *)malloc((nodeAmount + 1) * sizeof(float));
+    int *path = (int *)malloc((nodeAmount + 1) * sizeof(int));
 
     int src;
     sscanf(vsrc, "node_%d", &src);
