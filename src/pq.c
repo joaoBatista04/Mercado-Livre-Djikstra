@@ -7,14 +7,22 @@ struct priority_queue
     Node **nodes;
     int *map;
     int size;
+    Node *reference;
 };
 
 PQ *pq_init(int max_size)
 {
     PQ *pq = (PQ *)malloc(sizeof(PQ));
 
+    pq->reference = node_create(-1, -0.5);
+
     // Memory allocation to priorty queue params
-    pq->nodes = (Node **)calloc((max_size * 5), sizeof(Node *));
+    pq->nodes = (Node **)malloc((max_size + 1) * sizeof(Node *));
+
+    for (int i = 0; i < max_size; i++)
+    {
+        pq->nodes[i] = pq->reference;
+    }
 
     pq->map = (int *)calloc((max_size + 1), sizeof(int));
     pq->size = 0;
@@ -26,6 +34,7 @@ void pq_destroy(PQ *pq)
 {
     free(pq->nodes);
     free(pq->map);
+    node_destroy(pq->reference);
     free(pq);
 }
 
