@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../include/utils.h"
 
 int main(int argc, char *argv[])
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
 
     djikstra(graph, src, dist, path);
 
-    print_shortest_path(path, dist, src, nodeAmount);
+    print_shortest_path(path, dist, src, nodeAmount, argv[2]);
 
     free(vsrc);
     free(dist);

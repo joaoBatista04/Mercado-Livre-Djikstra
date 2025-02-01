@@ -47,30 +47,39 @@ int printer_compare(const void *a, const void *b)
     return 0;
 }
 
-void printer_print_path(Printer **p_vector, int src, int nodeAmount, int *path)
+void printer_print_path(Printer **p_vector, int src, int nodeAmount, int *path, char *file_path)
 {
+    FILE *fp = fopen(file_path, "w");
+    if (!fp)
+    {
+        perror("THE SYSTEM COULDN'T GENERATE THE EXIT FILE\n");
+        exit(1);
+    }
+
     for (int i = 0; i <= nodeAmount; i++)
     {
         int current = p_vector[i]->dest;
 
         if (current == src)
         {
-            printf("SHORTEST PATH TO node_%d: node_%d <- node_%d (Distance: 0.00)\n", current, current, current);
+            fprintf(fp, "SHORTEST PATH TO node_%d: node_%d <- node_%d (Distance: 0.00)\n", current, current, current);
         }
 
         else
         {
-            printf("SHORTEST PATH TO node_%d: node_%d", current, current);
+            fprintf(fp, "SHORTEST PATH TO node_%d: node_%d", current, current);
 
             while (path[current] != -1)
             {
                 current = path[current];
-                printf(" <- node_%d", current);
+                fprintf(fp, " <- node_%d", current);
             }
 
-            printf(" (Distance: %.2f)\n", p_vector[i]->dist);
+            fprintf(fp, " (Distance: %.2f)\n", p_vector[i]->dist);
         }
     }
+
+    fclose(fp);
 }
 
 void printer_free(Printer **printer, int nodeAmount)

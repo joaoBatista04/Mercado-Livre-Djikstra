@@ -147,13 +147,13 @@ void djikstra(Graph *graph, int src, float *dist, int *path)
     pq_destroy(pq);
 }
 
-void print_shortest_path(int *path, float *dist, int src, int nodeAmount)
+void print_shortest_path(int *path, float *dist, int src, int nodeAmount, char *file_path)
 {
     Printer **p_vector = printer_vector_create(src, dist, nodeAmount + 1);
 
     qsort(p_vector, nodeAmount + 1, sizeof(Printer *), printer_compare);
 
-    printer_print_path(p_vector, src, nodeAmount, path);
+    printer_print_path(p_vector, src, nodeAmount, path, file_path);
 
     printer_free(p_vector, nodeAmount + 1);
 }
