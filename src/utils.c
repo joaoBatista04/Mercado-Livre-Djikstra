@@ -3,9 +3,8 @@
 #include <string.h>
 #include <math.h>
 #include "../include/pq.h"
+#include "../include/printer.h"
 #include "../include/utils.h"
-
-static void print_path(int *predecessor, int dest);
 
 Graph *read_graph_informations(char **vsrc, char *path)
 {
@@ -65,18 +64,16 @@ int get_number_id(char *name)
     return number;
 }
 
-float *djikstra(Graph *graph, int src)
+void djikstra(Graph *graph, int src, float *dist, int *path)
 {
     int nodeAmount = graph_get_nodes_amount(graph);
-    float *dist = malloc(nodeAmount * sizeof(float));
     int *visited = calloc(nodeAmount, sizeof(int));
-    int *predecessor = malloc(nodeAmount * sizeof(int));
 
     for (int i = 0; i <= nodeAmount; i++)
     {
         // All the distances between a origin node and a destination node are initialized with infinity. This value is used in comparisons because it is big and any smaller distance is considered later in the algorithm
         dist[i] = INFINITY;
-        predecessor[i] = -1;
+        path[i] = -1;
     }
 
     // The distance of the node to itself is 0
@@ -119,7 +116,7 @@ float *djikstra(Graph *graph, int src)
                 {
                     // The new distance is stored
                     dist[v_id] = newWeight;
-                    predecessor[v_id] = u_id;
+                    path[v_id] = u_id;
 
                     // Check if there is a node in the priority queue with the same ID of the current node that the algorithm is analyzing
                     if (pq_contains(pq, v_id))
@@ -145,24 +142,16 @@ float *djikstra(Graph *graph, int src)
             node_destroy(u);
         }
     }
-
-    print_path(predecessor, 1);
-
     // Freeing the memory allocated to visited nodes vector and priority queue
     free(visited);
     pq_destroy(pq);
-
-    return dist;
 }
 
-static void print_path(int *predecessor, int dest)
+void print_shortest_path(int *path, float *dist, int src, int nodeAmount)
 {
-    if (predecessor[dest] == -1)
-    {
-        printf("%d ", dest);
-        return;
-    }
+    Printer **p_vector = printer_vector_create(src, dist, nodeAmount + 1);
 
-    print_path(predecessor, predecessor[dest]);
-    printf("-> %d ", dest);
+    qsort(p_vector, nodeAmount + 1, sizeof(Printer *), printer_compare);
+
+    printer_print_path(p_vector, src, nodeAmount, path);
 }

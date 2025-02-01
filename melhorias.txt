@@ -1,2 +1,4 @@
 alterar id do node de char* para int para nao gastar tempo com sprinft
 trocar int por unsigned int no tipo Node para gastar permitir mais nós
+Critério de desempate?
+Como funcionam as bombas?
