@@ -11,7 +11,7 @@ run:
 	@ ./$(EXECUTABLE) $(ENTRY_FILE) $(EXIT_FILE)
 
 clean:
-	@ rm -f trab1 out_N10_S3_C3_M3.txt
+	@ rm -f trab1 saida.txt
 
 val:
 	@ valgrind --leak-check=full --show-leak-kinds=all ./$(EXECUTABLE) $(ENTRY_FILE) $(EXIT_FILE)
