@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include "../include/pq.h"
 #include "../include/printer.h"
 #include "../include/utils.h"
@@ -26,11 +27,15 @@ Graph *read_graph_informations(char **vsrc, char *path)
     int nodes_amount = get_nodes_amount(current_line);
 
     Graph *graph = graph_create(nodes_amount);
+    int i = 0;
 
-    graph_add_edges(graph, current_line);
+    graph_add_edges(graph, current_line, i);
+    i++;
+
     while (getline(&current_line, &size, fp) != -1)
     {
-        graph_add_edges(graph, current_line);
+        graph_add_edges(graph, current_line, i);
+        i++;
     }
 
     free(current_line);

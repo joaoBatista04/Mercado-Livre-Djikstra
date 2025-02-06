@@ -27,10 +27,9 @@ Graph *graph_create(int nodes_amount)
     return graph;
 }
 
-void graph_add_edges(Graph *graph, char *line)
+void graph_add_edges(Graph *graph, char *line, int node_id)
 {
     char *item = strtok(line, ",\n\t");
-    int node_id = get_number_id(item);
     float dist;
     char *aux;
 
@@ -40,7 +39,7 @@ void graph_add_edges(Graph *graph, char *line)
         dist = strtof(item, &aux);
         if (i != node_id && dist > 0)
         {
-            node_create_edge(graph->nodes, node_id, i, item);
+            node_create_edge(graph->nodes, node_id, i, dist);
         }
         item = strtok(NULL, ",\n\t");
     }
@@ -51,7 +50,7 @@ void graph_add_edges(Graph *graph, char *line)
         dist = strtof(item, &aux);
         if (item != NULL && dist > 0)
         {
-            node_create_edge(graph->nodes, node_id, current_node, item);
+            node_create_edge(graph->nodes, node_id, current_node, dist);
         }
 
         item = strtok(NULL, ",\n\t");

@@ -6,7 +6,7 @@
 typedef struct graph Graph;
 
 Graph *graph_create(int nodes_amount);
-void graph_add_edges(Graph *graph, char *line);
+void graph_add_edges(Graph *graph, char *line, int node_id);
 int graph_get_nodes_amount(Graph *graph);
 Node *graph_get_node(Graph *graph, int index);
 void printGraph(Graph *graph);

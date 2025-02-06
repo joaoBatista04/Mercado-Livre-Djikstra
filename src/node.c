@@ -69,10 +69,9 @@ void node_vector_destroy(Node **vector, int nodes_amount)
     free(vector);
 }
 
-void node_create_edge(Node **vector, int src, int dest, char *value)
+void node_create_edge(Node **vector, int src, int dest, double value)
 {
-    char *aux;
-    Node *new_node = node_create(dest, strtof(value, &aux));
+    Node *new_node = node_create(dest, value);
     new_node->next = vector[src];
     vector[src] = new_node;
 }
