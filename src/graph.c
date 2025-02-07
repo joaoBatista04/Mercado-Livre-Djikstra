@@ -58,6 +58,15 @@ void graph_add_edges(Graph *graph, char *line, int node_id)
     }
 }
 
+// RETIRAR ==== DEBUG LEITURA ESTÁTICA
+void graph_add_edges_2(Graph *graph, int src, int dest, float weight)
+{
+    if (weight > 0)
+    {
+        node_create_edge(graph->nodes, src, dest, weight);
+    }
+}
+
 int graph_get_nodes_amount(Graph *graph)
 {
     return graph->nodes_amount;

@@ -38,6 +38,62 @@ Graph *read_graph_informations(char **vsrc, char *path)
         i++;
     }
 
+    // RETIRAR ==== DEBUG LEITURA ESTÁTICA
+    /*
+        int src;
+        float weight;
+        int debug;
+        while (!feof(fp))
+        {
+            for (int j = 0; j <= nodes_amount; j++)
+            {
+                if (j == 0)
+                {
+                    fscanf(fp, "node_%d, ", &src);
+                }
+
+                if (j >= 1 && j != nodes_amount)
+                {
+                    debug = fscanf(fp, "%f, ", &weight);
+
+                    if (debug == 0)
+                    {
+                        fscanf(fp, "bomba, ");
+                        continue;
+                    }
+
+                    if (j <= src)
+                    {
+                        graph_add_edges_2(graph, src, j - 1, weight);
+                    }
+                    else
+                    {
+                        graph_add_edges_2(graph, src, j, weight);
+                    }
+                }
+
+                if (j >= 1 && j == nodes_amount)
+                {
+                    debug = fscanf(fp, "%f ", &weight);
+                    if (debug == 0)
+                    {
+                        fscanf(fp, "bomba, ");
+                        continue;
+                    }
+
+                    if (j <= src)
+                    {
+                        graph_add_edges_2(graph, src, j - 1, weight);
+                    }
+                    else
+                    {
+                        graph_add_edges_2(graph, src, j, weight);
+                    }
+                }
+            }
+            fscanf(fp, "\n");
+        }*/
+
     free(current_line);
     fclose(fp);
 
