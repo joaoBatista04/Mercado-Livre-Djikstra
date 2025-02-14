@@ -6,7 +6,7 @@
 #include "../include/printer.h"
 #include "../include/utils.h"
 
-Graph *read_graph_informations(char **vsrc, char *path)
+GraphVector *read_graph_informations(char **vsrc, char *path)
 {
     FILE *fp = fopen(path, "r");
 
@@ -25,22 +25,22 @@ Graph *read_graph_informations(char **vsrc, char *path)
     getline(&current_line, &size, fp);
     int nodes_amount = get_nodes_amount(current_line);
 
-    Graph *graph = graph_create(nodes_amount);
+    GraphVector *graph_vector = graph_vector_create(nodes_amount);
     int i = 0;
 
-    graph_add_edges(graph, current_line, i);
+    graph_vector_add_edges(graph_vector, current_line, i);
     i++;
 
     while (getline(&current_line, &size, fp) != -1)
     {
-        graph_add_edges(graph, current_line, i);
+        graph_vector_add_edges(graph_vector, current_line, i);
         i++;
     }
 
     free(current_line);
     fclose(fp);
 
-    return graph;
+    return graph_vector;
 }
 
 int get_nodes_amount(char *current_line)
@@ -68,9 +68,9 @@ int get_number_id(char *name)
     return number;
 }
 
-void djikstra(Graph *graph, int src, float *dist, int *path)
+void djikstra(GraphVector *graph_vector, int src, float *dist, int *path)
 {
-    int nodeAmount = graph_get_nodes_amount(graph);
+    int nodeAmount = graph_vector_get_nodes_amount(graph_vector);
     int *visited = calloc(nodeAmount + 1, sizeof(int));
 
     for (int i = 0; i <= nodeAmount; i++)
@@ -91,7 +91,7 @@ void djikstra(Graph *graph, int src, float *dist, int *path)
 
         for (int i = 0; i < nodeAmount; i++)
         {
-            float dist_v = graph_get_distance(graph, u, i);
+            float dist_v = graph_vector_get_distance(graph_vector, u, i);
             if (visited[i] == 0 && dist_v && dist[u] != INFINITY && dist[u] + dist_v < dist[i])
             {
                 dist[i] = dist[u] + dist_v;

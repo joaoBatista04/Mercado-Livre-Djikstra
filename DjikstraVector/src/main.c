@@ -8,10 +8,10 @@ int main(int argc, char *argv[])
     char *vsrc;
 
     clock_t start = clock();
-    Graph *graph = read_graph_informations(&vsrc, argv[1]);
+    GraphVector *graph_vector = read_graph_informations(&vsrc, argv[1]);
     clock_t end = clock();
 
-    int nodeAmount = graph_get_nodes_amount(graph);
+    int nodeAmount = graph_vector_get_nodes_amount(graph_vector);
     float *dist = (float *)malloc((nodeAmount + 1) * sizeof(float));
     int *path = (int *)malloc((nodeAmount + 1) * sizeof(int));
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     sscanf(vsrc, "node_%d", &src);
 
     clock_t start2 = clock();
-    djikstra(graph, src, dist, path);
+    djikstra(graph_vector, src, dist, path);
     clock_t end2 = clock();
 
     float result = ((float)end - (float)start) / CLOCKS_PER_SEC;
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     free(vsrc);
     free(dist);
     free(path);
-    graph_destroy(graph);
+    graph_vector_destroy(graph_vector);
 
     return 0;
 }
