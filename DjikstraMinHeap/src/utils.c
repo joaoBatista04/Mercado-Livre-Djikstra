@@ -7,8 +7,16 @@
 #include "../include/printer.h"
 #include "../include/utils.h"
 
+/**
+ * @brief Reads the input file and extracts information from the lines to build the graph
+ *
+ * @param char** vsrc (node-source)
+ * @param char* path
+ * @return Graph*
+ */
 Graph *read_graph_informations(char **vsrc, char *path)
 {
+    // Open the file
     FILE *fp = fopen(path, "r");
 
     if (fp == NULL)
@@ -17,95 +25,53 @@ Graph *read_graph_informations(char **vsrc, char *path)
         exit(1);
     }
 
+    // Get the file's first line to define which node is the source
     char *current_line = NULL;
     size_t size = 0;
 
     getline(&current_line, &size, fp);
     *vsrc = strdup(current_line);
 
+    // Get file's second line to calculate the node amount
     getline(&current_line, &size, fp);
     int nodes_amount = get_nodes_amount(current_line);
 
+    // Create the graph from node amount
     Graph *graph = graph_create(nodes_amount);
     int i = 0;
 
+    // Add info from first line to the graph
     graph_add_edges(graph, current_line, i);
     i++;
 
+    // Repeat, getting the next line of the file and adding info to the graph until the file ends
     while (getline(&current_line, &size, fp) != -1)
     {
         graph_add_edges(graph, current_line, i);
         i++;
     }
 
-    // RETIRAR ==== DEBUG LEITURA ESTÁTICA
-    /*
-        int src;
-        float weight;
-        int debug;
-        while (!feof(fp))
-        {
-            for (int j = 0; j <= nodes_amount; j++)
-            {
-                if (j == 0)
-                {
-                    fscanf(fp, "node_%d, ", &src);
-                }
-
-                if (j >= 1 && j != nodes_amount)
-                {
-                    debug = fscanf(fp, "%f, ", &weight);
-
-                    if (debug == 0)
-                    {
-                        fscanf(fp, "bomba, ");
-                        continue;
-                    }
-
-                    if (j <= src)
-                    {
-                        graph_add_edges_2(graph, src, j - 1, weight);
-                    }
-                    else
-                    {
-                        graph_add_edges_2(graph, src, j, weight);
-                    }
-                }
-
-                if (j >= 1 && j == nodes_amount)
-                {
-                    debug = fscanf(fp, "%f ", &weight);
-                    if (debug == 0)
-                    {
-                        fscanf(fp, "bomba, ");
-                        continue;
-                    }
-
-                    if (j <= src)
-                    {
-                        graph_add_edges_2(graph, src, j - 1, weight);
-                    }
-                    else
-                    {
-                        graph_add_edges_2(graph, src, j, weight);
-                    }
-                }
-            }
-            fscanf(fp, "\n");
-        }*/
-
+    // Free memory allocated to read lines and close the file
     free(current_line);
     fclose(fp);
 
     return graph;
 }
 
+/**
+ * @brief Read the second line of the entry file and calculate how many nodes there are
+ *
+ * @param char* current_line
+ * @return int
+ */
 int get_nodes_amount(char *current_line)
 {
+    // Initialize variables and make a copy from line. Then, break the line in the commas to get the info from nodes
     int nodes_amount = -1;
     char *aux = strdup(current_line);
     char *item = strtok(aux, ",");
 
+    // For each step, if there is a new node, increment node amount
     while (item)
     {
         nodes_amount++;
@@ -113,11 +79,18 @@ int get_nodes_amount(char *current_line)
         item = strtok(NULL, ",");
     }
 
+    // Free memory allocated to line duplicate
     free(aux);
 
     return nodes_amount;
 }
 
+/**
+ * @brief Receive a string with source-node's name and return its index
+ *
+ * @param char* name
+ * @return int
+ */
 int get_number_id(char *name)
 {
     int number;
@@ -125,8 +98,17 @@ int get_number_id(char *name)
     return number;
 }
 
+/**
+ * Calculates the minimum path from one origin node to all nodes. Dijkstras algorithm iterates over the graph, analyzing the distance between the nodes. A distance vector is initialized with infinity distances and updated as the algorithm finds smaller distances. Furthertmore, a visited vector is used to avoid analyzing nodes that was already analyzed. The inspiration to this code can be found in this video (https://www.youtube.com/watch?v=NyrHRNiRpds) and in the first variation described in the fifth page of the following document (https://drops.dagstuhl.de/storage/00lipics/lipics-vol226-fun2022/LIPIcs.FUN.2022.8/LIPIcs.FUN.2022.8.pdf)
+ * @param Graph* graph The graph that contains the nodes informations.
+ * @param int src The origin node of the paths to be calculated.
+ * @param float* dist The vector of distances
+ * @param int* path The vector that holds the minimum path
+ * @returns The new vector of minimum paths from the origin node to all nodes.
+ */
 void djikstra(Graph *graph, int src, float *dist, int *path)
 {
+    // Get the node amount and allocate memory to visited vector
     int nodeAmount = graph_get_nodes_amount(graph);
     int *visited = calloc(nodeAmount + 1, sizeof(int));
 
@@ -175,7 +157,7 @@ void djikstra(Graph *graph, int src, float *dist, int *path)
                 // If this distance is smaller than the distance registered in the distance vector, the new distance will be stored
                 if (newWeight < dist[v_id])
                 {
-                    // The new distance is stored
+                    // The new distance is stored and the path to source is updated
                     dist[v_id] = newWeight;
                     path[v_id] = u_id;
 
@@ -208,13 +190,26 @@ void djikstra(Graph *graph, int src, float *dist, int *path)
     pq_destroy(pq);
 }
 
+/**
+ * @brief Printing the minimum path by creating a special structure
+ *
+ * @param int* path
+ * @param float* dist
+ * @param int src
+ * @param int nodeAmount
+ * @param char* file_path
+ */
 void print_shortest_path(int *path, float *dist, int src, int nodeAmount, char *file_path)
 {
+    // Allocate a vector of printers and initialize them with the distances found by Djikstra algorithm
     Printer **p_vector = printer_vector_create(src, dist, nodeAmount + 1);
 
+    // Sort printers vector by distances
     qsort(p_vector, nodeAmount + 1, sizeof(Printer *), printer_compare);
 
+    // Print the path from source node to all other nodes
     printer_print_path(p_vector, src, nodeAmount, path, file_path);
 
+    // Free the memory allocated to printers vector
     printer_free(p_vector, nodeAmount + 1);
 }

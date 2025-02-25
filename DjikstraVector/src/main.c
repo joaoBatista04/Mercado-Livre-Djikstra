@@ -7,28 +7,25 @@ int main(int argc, char *argv[])
 {
     char *vsrc;
 
-    clock_t start = clock();
+    // Creates the graph by read info from an entry file and gets the source node
     GraphVector *graph_vector = read_graph_informations(&vsrc, argv[1]);
-    clock_t end = clock();
 
+    // Inialize the vector of distances and paths, which will be used to calculate min distances with djikstra
     int nodeAmount = graph_vector_get_nodes_amount(graph_vector);
     float *dist = (float *)malloc((nodeAmount + 1) * sizeof(float));
     int *path = (int *)malloc((nodeAmount + 1) * sizeof(int));
 
+    // Gets the source node id from the string obtained before
     int src;
     sscanf(vsrc, "node_%d", &src);
 
-    clock_t start2 = clock();
+    // Calculates min distances from each node to the source node (and saves the path)
     djikstra(graph_vector, src, dist, path);
-    clock_t end2 = clock();
 
-    float result = ((float)end - (float)start) / CLOCKS_PER_SEC;
-    float result2 = ((float)end2 - (float)start2) / CLOCKS_PER_SEC;
-
-    printf("TEMPO DE LEITURA: %f\nDJIKSTRA: %f\n", result, result2);
-
+    // Orders the distances and print they with the paths
     print_shortest_path(path, dist, src, nodeAmount, argv[2]);
 
+    // Prevents memory leaks
     free(vsrc);
     free(dist);
     free(path);
