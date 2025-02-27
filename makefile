@@ -19,7 +19,6 @@ run:
 diff:
 	@ diff saida.txt saida1.txt
 
-
 clean:
 	@ rm -f trab1 *.txt
 
